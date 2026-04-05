@@ -1,6 +1,6 @@
 # 1. THE LOG ARCHIVE BUCKET
 resource "aws_s3_bucket" "log_archive" {
-  bucket = "cloudgrindset-logs-archive"
+  bucket = "easter_terraform-logs-archive"
 }
 
 resource "aws_s3_bucket_versioning" "log_archive_versioning" {
