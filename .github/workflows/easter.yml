@@ -30,11 +30,17 @@ jobs:
       - name: Wait for LocalStack
         run: |
           echo "Waiting for LocalStack (4566)..."
-          until curl -s http://localhost:4566/_localstack/health | grep -q '"iam": "available"'; do
-            sleep 5
-            echo "Retrying..."
+          # Try for 60 seconds total
+          for i in {1..20}; do
+            if curl -s http://localhost:4566/_localstack/health | grep -q '"init": "initialized"' || curl -s http://localhost:4566/_localstack/health | grep -q '"running"'; then
+              echo "LocalStack is READY"
+              exit 0
+            fi
+            echo "LocalStack starting... ($i/20)"
+            sleep 3
           done
-          echo "LocalStack is READY"
+          echo "❌ LocalStack failed to initialize in time"
+          exit 1
 
       # 4. Run the Terraform Deployment Script
       - name: Execute Deployment Script
