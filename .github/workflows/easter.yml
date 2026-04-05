@@ -1,0 +1,51 @@
+name: Easter Terraform 2026 Deployment
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Setup Pre-requisites (Code & Website)
+      - name: Checkout Infrastructure
+        uses: actions/checkout@v4
+
+      - name: Checkout Website Content
+        uses: actions/checkout@v4
+        with:
+          repository: CapoMK25/regional-map-2024
+          path: regional-map-2024
+
+      # 2. Build & Start the Environment
+      - name: Build App & Start LocalStack
+        run: |
+          docker compose build app
+          docker compose up -d localstack
+
+      # 3. Wait for LocalStack Readiness
+      - name: Wait for LocalStack
+        run: |
+          echo "Waiting for LocalStack (4566)..."
+          until curl -s http://localhost:4566/_localstack/health | grep -q '"iam": "available"'; do
+            sleep 5
+            echo "Retrying..."
+          done
+          echo "LocalStack is READY"
+
+      # 4. Run the Terraform Deployment Script
+      - name: Execute Deployment Script
+        run: |
+          # Ensure the script is executable
+          chmod +x bash/tf_deploy_all.sh
+          # Run it inside the app container
+          docker compose run --rm app bash ./bash/tf_deploy_all.sh
+
+      # 5. Final Output
+      - name: Deployment Summary
+        run: |
+          echo "🏁 Deployment Successful!"
+          echo "🔗 Website URL: http://localhost:4566/regional-map-2024-website/index.html"

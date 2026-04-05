@@ -6,6 +6,7 @@ terraform/.terraform/
 # State files (These contain your secrets and current infra data)
 terraform/*.tfstate
 terraform/*.tfstate.*
+terraform/tfplan
 
 # Lock file (Optional: some teams commit this, but for local labs, you can ignore it)
 # terraform/.terraform.lock.hcl
