@@ -32,7 +32,7 @@ variable "private_subnet_cidrs" {
 
 variable "availability_zones" {
   type    = list(string)
-  default = ["us-east-1a", "us-east-1b"]
+  default = ["eu-north-1a", "eu-north-1b"]
 }
 variable "instance_type" {
   description = "The size of the EC2 instance"
