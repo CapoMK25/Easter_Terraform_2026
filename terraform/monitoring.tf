@@ -62,7 +62,7 @@ resource "aws_cloudwatch_dashboard" "main" {
         ],
         "period": 300,
         "stat": "Sum",
-        "region": "us-east-1",
+        "region": "eu-north-1",
         "title": "S3 Website 4xx Errors"
       }
     }

@@ -1,0 +1,14 @@
+# --- Terraform Garbage ---
+
+# Local object cache (downloads of providers/modules)
+terraform/.terraform/
+
+# State files (These contain your secrets and current infra data)
+terraform/*.tfstate
+terraform/*.tfstate.*
+
+# Lock file (Optional: some teams commit this, but for local labs, you can ignore it)
+# terraform/.terraform.lock.hcl
+
+# Crash logs
+terraform/crash.log

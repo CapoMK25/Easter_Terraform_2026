@@ -45,7 +45,7 @@ resource "aws_iam_group_policy_attachment" "admins_attach" {
 
 # IAM Role here
 
-resource "aws_iam_role" "web_server_role" {
+resource "aws_iam_role" "easter_terraform_server_role" {
   name = "${var.easter_terraform_prefix}-EasterTerraform-Server-Role"
 
   assume_role_policy = jsonencode({
