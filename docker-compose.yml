@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  localstack:
+    container_name: localstack_easter_terraform
+    image: localstack/localstack:latest
+    user: root
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    environment:
+      - DEBUG=1
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_HOST=127.0.0.1
+      - LOCALSTACK_AUTH_TOKEN=${LOCALSTACK_AUTH_TOKEN}
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  app:
+    container_name: easter_terraform_app
+    build: .
+    env_file:
+      - .env
+    depends_on:
+      localstack:
+        condition: service_healthy
+    volumes:
+      - .:/app
+      - ../regional-map-2024:/regional-map-2024:ro # Read-only mode enforced here for cybersec reasons
+
+volumes:
+  localstack_data:
