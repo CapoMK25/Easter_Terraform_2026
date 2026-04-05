@@ -1,8 +1,8 @@
 # DYNAMODB TABLE
 
 # checkov:skip=CKV_AWS_28: "Ensure Dynamodb point in time recovery is enabled"
-resource "aws_dynamodb_table" "demo_table" {
-  name           = "easterterraform-2026-table"
+resource "aws_dynamodb_table" "easter_terraform_2026-table" {
+  name           = "easter_terraform_2026-table"
   billing_mode   = "PROVISIONED"
   read_capacity  = 5
   write_capacity = 5

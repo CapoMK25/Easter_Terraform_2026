@@ -6,13 +6,13 @@ resource "aws_iam_group" "admins" {
   name = "${var.easter_terraform_prefix}-Admins"
 }
 
-resource "aws_iam_user" "mk_user" {
-  name = "${var.easter_terraform_prefix}-MK"
+resource "aws_iam_user" "capomk_user" {
+  name = "${var.easter_terraform_prefix}-CapoMK"
 }
 
 resource "aws_iam_group_membership" "add_mk_to_admins" {
   name  = "add-mk-to-admins"
-  users = [aws_iam_user.mk_user.name]
+  users = [aws_iam_user.capomk_user.name]
   group = aws_iam_group.admins.name
 }
 
@@ -46,7 +46,7 @@ resource "aws_iam_group_policy_attachment" "admins_attach" {
 # IAM Role here
 
 resource "aws_iam_role" "web_server_role" {
-  name = "${var.easter_terraform_prefix}-WebServerRole"
+  name = "${var.easter_terraform_prefix}-EasterTerraform-Server-Role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -60,7 +60,7 @@ resource "aws_iam_role" "web_server_role" {
 
 resource "aws_iam_role_policy" "s3_read_access" {
   name = "S3ReadAccess"
-  role = aws_iam_role.web_server_role.id
+  role = aws_iam_role.easter_terraform_server_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -75,12 +75,12 @@ resource "aws_iam_role_policy" "s3_read_access" {
   })
 }
 
-resource "aws_iam_instance_profile" "web_server_profile" {
+resource "aws_iam_instance_profile" "easter_terraform_server_profile" {
   name = "${var.easter_terraform_prefix}-EC2-Profile"
-  role = aws_iam_role.web_server_role.name
+  role = aws_iam_role.easter_terraform_server_role.name
 }
 
 
-output "web_server_instance_profile_name" {
-  value = aws_iam_instance_profile.web_server_profile.name
+output "easter_terraform_server_instance_profile_name" {
+  value = aws_iam_instance_profile.easter_terraform_server_profile.name
 }
