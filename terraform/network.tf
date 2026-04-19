@@ -1,4 +1,5 @@
-# 1. VPC & GATEWAY 
+# 1. VPC & GATEWAY
+# VPC, subnets, route tables, and internet gateway are all free
 
 resource "aws_vpc" "main" {
   cidr_block           = var.vpc_cidr
@@ -56,6 +57,10 @@ resource "aws_subnet" "private" {
 
   tags = { Name = "Private-Subnet-${var.availability_zones[count.index]}" }
 }
+
+# NOTE: NAT Gateway deliberately NOT added here - NAT Gateway is NOT free tier
+# (~$32/month just for the gateway + data processing charges).
+# Private subnets will have no outbound internet access, which is fine for this demo.
 
 # --- 4. OUTPUTS ---
 

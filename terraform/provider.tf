@@ -23,7 +23,6 @@ provider "aws" {
     ec2        = "http://localstack:4566"
     elb        = "http://localstack:4566"
     elbv2      = "http://localstack:4566"
-    kms        = "http://localstack:4566"
     iam        = "http://localstack:4566"
     s3         = "http://localstack:4566"
     dynamodb   = "http://localstack:4566"

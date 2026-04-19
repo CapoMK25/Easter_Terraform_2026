@@ -1,24 +1,19 @@
-# --- 1. ENCRYPTION (KMS) ---
+# --- MONITORING ---
+# Removed for free tier:
+# - aws_kms_key (customer-managed): $1/month per key + API call charges
+# - aws_kms_alias: tied to the removed key
+#
+# CloudWatch Logs free tier: 5 GB ingestion, 5 GB storage per month
+# CloudWatch Alarms free tier: 10 alarm metrics per month
+# CloudWatch Dashboards free tier: 3 dashboards with up to 50 metrics per month
 
-resource "aws_kms_key" "log_key" {
-  description             = "KMS Key for CloudWatch Log Group Encryption"
-  deletion_window_in_days = 7
-  enable_key_rotation     = true
-
-  tags = { Name = "EasterTerraform-Log-Key" }
-}
-
-resource "aws_kms_alias" "log_key_alias" {
-  name          = "alias/easterterraform-logs"
-  target_key_id = aws_kms_key.log_key.key_id
-}
-
-# --- 2. LOGS ---
+# --- 1. LOGS ---
+# Reduced retention to 7 days to stay comfortably within 5 GB storage free tier
+# Removed KMS encryption - logs are encrypted at rest by default using AWS-managed keys
 
 resource "aws_cloudwatch_log_group" "demo_log_group" {
   name              = "easterterraform-logs"
-  retention_in_days = 14
-  # kms_key_id        = aws_kms_key.log_key.arn
+  retention_in_days = 7
 }
 
 resource "aws_cloudwatch_log_stream" "demo_stream" {
@@ -26,7 +21,8 @@ resource "aws_cloudwatch_log_stream" "demo_stream" {
   log_group_name = aws_cloudwatch_log_group.demo_log_group.name
 }
 
-# --- 3. ALARMS ---
+# --- 2. ALARMS ---
+# Free tier: 10 alarm metrics/month - this uses 1
 
 resource "aws_cloudwatch_metric_alarm" "s3_4xx_alarm" {
   alarm_name          = "S3WebsiteErrorAlarm"
@@ -45,7 +41,8 @@ resource "aws_cloudwatch_metric_alarm" "s3_4xx_alarm" {
   }
 }
 
-# --- 4. DASHBOARD ---
+# --- 3. DASHBOARD ---
+# Free tier: 3 dashboards - this uses 1
 
 resource "aws_cloudwatch_dashboard" "main" {
   dashboard_name = "EasterTerraform-S3-Health"
@@ -69,11 +66,4 @@ resource "aws_cloudwatch_dashboard" "main" {
   ]
 }
 EOF
-}
-
-# --- 5. OUTPUTS ---
-
-output "shared_kms_key_arn" {
-  value       = aws_kms_key.log_key.arn
-  description = "KMS Key ARN for encryption across the module"
 }

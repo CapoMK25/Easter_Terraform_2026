@@ -34,8 +34,11 @@ variable "availability_zones" {
   type    = list(string)
   default = ["eu-north-1a", "eu-north-1b"]
 }
+
+# Free tier: t3.micro is eligible (750 hours/month for first 12 months)
+# t3.nano is NOT free tier eligible
 variable "instance_type" {
-  description = "The size of the EC2 instance"
+  description = "The size of the EC2 instance (free tier: t3.micro)"
   type        = string
-  default     = "t3.nano"
+  default     = "t3.micro"
 }

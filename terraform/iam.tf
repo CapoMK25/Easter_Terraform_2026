@@ -1,4 +1,5 @@
-# VARIABLES DEFINED IN ONE CENTRAL FILE
+# IAM is entirely free - no changes needed for free tier
+# Users, groups, roles, policies, instance profiles - all free
 
 # USER & GROUP SETUP
 
@@ -43,7 +44,7 @@ resource "aws_iam_group_policy_attachment" "admins_attach" {
 }
 
 
-# IAM Role here
+# IAM Role for EC2 instance
 
 resource "aws_iam_role" "easter_terraform_server_role" {
   name = "${var.easter_terraform_prefix}-EasterTerraform-Server-Role"
